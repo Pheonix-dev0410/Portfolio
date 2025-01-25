@@ -45,9 +45,20 @@ export async function POST(request: NextRequest) {
     const data = await request.json() as ProjectData;
     await dbConnect();
 
-    // Project creation logic here
+    // Validate required fields
+    if (!data.title || !data.description || !data.technologies) {
+      return NextResponse.json(
+        { error: 'Missing required fields' },
+        { status: 400 }
+      );
+    }
 
-    return NextResponse.json({ message: 'Project created successfully' });
+    // Create project logic would go here
+    // For now, we'll just return success
+    return NextResponse.json({ 
+      message: 'Project created successfully',
+      project: data
+    });
   } catch (error) {
     console.error('Error creating project:', error);
     return NextResponse.json(

@@ -1,10 +1,6 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { connectMongoDB } from "@/lib/mongodb";
-import User from "@/models/user";
-import bcrypt from "bcryptjs";
-import { verifyPassword } from '@/lib/auth';
-import { findUserByEmail } from '@/lib/auth';
+import { verifyPassword, findUserByEmail } from '@/lib/auth';
 
 export const authOptions: NextAuthOptions = {
     providers: [

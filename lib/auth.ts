@@ -4,10 +4,16 @@ import { NextRequest } from 'next/server';
 import { compare, hash } from 'bcryptjs';
 import type { User } from '@/models/user';
 
+interface JWTPayload {
+  userId: string;
+  email: string;
+  exp?: number;
+}
+
 const secretKey = process.env.JWT_SECRET_KEY || 'your-secret-key';
 const key = new TextEncoder().encode(secretKey);
 
-export async function encrypt(payload: any) {
+export async function encrypt(payload: JWTPayload) {
   return await new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
@@ -15,11 +21,11 @@ export async function encrypt(payload: any) {
     .sign(key);
 }
 
-export async function decrypt(token: string) {
+export async function decrypt(token: string): Promise<JWTPayload | null> {
   try {
     const { payload } = await jwtVerify(token, key);
-    return payload;
-  } catch (error) {
+    return payload as JWTPayload;
+  } catch {
     return null;
   }
 }

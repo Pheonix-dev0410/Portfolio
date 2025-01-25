@@ -11,12 +11,27 @@ interface Stats {
   }>;
 }
 
+interface Message {
+  _id: string;
+  name: string;
+  email: string;
+  message: string;
+  createdAt: string;
+}
+
+interface ApiResponse {
+  messages: Message[];
+  error?: string;
+}
+
 export default function AdminDashboard() {
   const [stats, setStats] = useState<Stats>({
     totalProjects: 0,
     recentProjects: [],
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchStats() {
