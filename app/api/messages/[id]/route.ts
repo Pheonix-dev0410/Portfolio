@@ -42,7 +42,7 @@ export async function PATCH(req: Request, { params }: RouteParams) {
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: RouteParams
 ) {
   try {
     const session = await getServerSession(authOptions);
