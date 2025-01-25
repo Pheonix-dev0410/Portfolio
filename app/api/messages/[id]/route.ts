@@ -41,7 +41,7 @@ export async function PATCH(req: Request, { params }: RouteParams) {
 }
 
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -53,8 +53,17 @@ export async function DELETE(
       );
     }
 
-    // Here you would delete the message from your database
-    // For now, we'll just return a success response
+    await dbConnect();
+    const { id } = params;
+    const deletedMessage = await Message.findByIdAndDelete(id);
+
+    if (!deletedMessage) {
+      return NextResponse.json(
+        { error: 'Message not found' },
+        { status: 404 }
+      );
+    }
+
     return NextResponse.json(
       { message: 'Message deleted successfully' },
       { status: 200 }
