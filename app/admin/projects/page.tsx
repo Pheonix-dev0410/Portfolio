@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 interface Project {
   id: string;
@@ -159,9 +160,11 @@ export default function ProjectsPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {projects.map((project) => (
           <div key={project.id} className="bg-white rounded-lg shadow-md p-6">
-            <img
+            <Image
               src={project.imageUrl}
               alt={project.title}
+              width={400}
+              height={300}
               className="w-full h-48 object-cover rounded-lg mb-4"
             />
             <h3 className="text-xl font-semibold mb-2">{project.title}</h3>

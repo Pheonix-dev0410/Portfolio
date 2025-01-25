@@ -2,13 +2,10 @@
 
 import { useEffect, useState } from 'react';
 
-interface Stats {
-  totalProjects: number;
-  recentProjects: Array<{
-    id: string;
-    title: string;
-    createdAt: string;
-  }>;
+interface Project {
+  id: string;
+  title: string;
+  createdAt: string;
 }
 
 interface Message {
@@ -22,6 +19,11 @@ interface Message {
 interface ApiResponse {
   messages: Message[];
   error?: string;
+}
+
+interface Stats {
+  totalProjects: number;
+  recentProjects: Project[];
 }
 
 export default function AdminDashboard() {
@@ -45,16 +47,18 @@ export default function AdminDashboard() {
         setStats({
           totalProjects: projects.length,
           recentProjects: projects
-            .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+            .sort((a: Project, b: Project) => 
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            )
             .slice(0, 5)
-            .map((project: any) => ({
+            .map((project: Project) => ({
               id: project.id,
               title: project.title,
               createdAt: new Date(project.createdAt).toLocaleDateString(),
             })),
         });
-      } catch (error) {
-        console.error('Error fetching stats:', error);
+      } catch (err) {
+        console.error('Error fetching stats:', err);
       } finally {
         setIsLoading(false);
       }

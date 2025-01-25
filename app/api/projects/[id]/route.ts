@@ -1,8 +1,14 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import { getUserFromRequest } from '@/lib/auth';
+import type { NextRequest } from 'next/server';
 
 const prisma = new PrismaClient();
+
+interface ErrorResponse {
+  error: string;
+  details?: unknown;
+}
 
 // GET single project
 export async function GET(
@@ -41,7 +47,7 @@ export async function GET(
 
 // PUT update project
 export async function PUT(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -86,10 +92,10 @@ export async function PUT(
     });
 
     return NextResponse.json(updatedProject);
-  } catch (error) {
-    console.error('Error updating project:', error);
+  } catch (err: ErrorResponse | unknown) {
+    const error = err as ErrorResponse;
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: error.message || 'Failed to update project' },
       { status: 500 }
     );
   }
@@ -97,7 +103,7 @@ export async function PUT(
 
 // DELETE project
 export async function DELETE(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -135,10 +141,10 @@ export async function DELETE(
       { message: 'Project deleted successfully' },
       { status: 200 }
     );
-  } catch (error) {
-    console.error('Error deleting project:', error);
+  } catch (err: ErrorResponse | unknown) {
+    const error = err as ErrorResponse;
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: error.message || 'Failed to delete project' },
       { status: 500 }
     );
   }

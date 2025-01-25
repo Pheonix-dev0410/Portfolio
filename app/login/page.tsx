@@ -17,18 +17,17 @@ export default function LoginPage() {
         setIsLoading(true);
 
         try {
-            const response = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
+            const result = await signIn('credentials', {
+                email,
+                password,
+                redirect: false,
             });
 
-            if (response.ok) {
-                router.push('/admin');
-            } else {
-                const data = await response.json();
-                throw new Error(data.error || 'Login failed');
+            if (result?.error) {
+                throw new Error(result.error);
             }
+
+            router.push('/admin');
         } catch (error) {
             setError(error instanceof Error ? error.message : 'Login failed');
         } finally {

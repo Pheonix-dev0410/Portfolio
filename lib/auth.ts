@@ -52,9 +52,8 @@ export async function getSession() {
   if (!token) return null;
 
   try {
-    const session = await decrypt(token.value);
-    return session;
-  } catch (error) {
+    return await decrypt(token.value);
+  } catch {
     return null;
   }
 }
@@ -64,9 +63,8 @@ export async function getUserFromRequest(request: NextRequest) {
   if (!token) return null;
 
   try {
-    const session = await decrypt(token.value);
-    return session;
-  } catch (error) {
+    return await decrypt(token.value);
+  } catch {
     return null;
   }
 }
@@ -85,8 +83,14 @@ export async function verifyPassword(password: string, hashedPassword: string): 
 
 export async function createUser(email: string, password: string): Promise<User | null> {
   try {
+    const existingUser = await findUserByEmail(email);
+    if (existingUser) {
+      return null;
+    }
+
     const hashedPassword = await hashPassword(password);
-    // Create user logic here
+    // Here you would typically create a new user in your database
+    // For now, we'll return null as the database integration is not implemented
     return null;
   } catch {
     return null;
@@ -95,7 +99,8 @@ export async function createUser(email: string, password: string): Promise<User 
 
 export async function findUserByEmail(email: string): Promise<User | null> {
   try {
-    // Find user logic here
+    // Here you would typically query your database for the user
+    // For now, we'll return null as the database integration is not implemented
     return null;
   } catch {
     return null;
@@ -104,8 +109,13 @@ export async function findUserByEmail(email: string): Promise<User | null> {
 
 export async function validateUser(email: string, password: string): Promise<User | null> {
   try {
-    // Validate user logic here
-    return null;
+    const user = await findUserByEmail(email);
+    if (!user) {
+      return null;
+    }
+
+    const isValid = await verifyPassword(password, user.password);
+    return isValid ? user : null;
   } catch {
     return null;
   }
