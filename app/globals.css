@@ -3,19 +3,591 @@
 @tailwind utilities;
 
 :root {
+  /* Light mode colors */
+  --foreground: #1a1a1a;
   --background: #ffffff;
-  --foreground: #171717;
+  --accent: #2563eb;  /* Bright blue */
+  --accent-dark: #1d4ed8;  /* Darker blue */
+  --accent-light: #60a5fa;  /* Light blue */
+  --project-card-bg: #f8fafc;
+  --project-hover: #f1f5f9;
+  --text-muted: #64748b;
+  --border-light: #e2e8f0;
+  --nav-bg: rgba(255, 255, 255, 0.8);
+  --nav-border: rgba(226, 232, 240, 0.8);
+  --button-text: #2563eb;  /* Same as accent for consistency */
+  --button-border: #2563eb;
+  --button-hover-bg: #2563eb;
+  --button-hover-text: #ffffff;
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --hover-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --button-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+  --button-hover-shadow: 0 8px 16px rgba(37, 99, 235, 0.2);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+[data-theme='dark'] {
+  /* Dark mode colors */
+  --foreground: #f8fafc;
+  --background: #0f172a;
+  --accent: #3b82f6;  /* Brighter blue for dark mode */
+  --accent-dark: #2563eb;
+  --accent-light: #60a5fa;
+  --project-card-bg: #1e293b;
+  --project-hover: #334155;
+  --text-muted: #94a3b8;
+  --border-light: #334155;
+  --nav-bg: rgba(15, 23, 42, 0.9);
+  --nav-border: rgba(51, 65, 85, 0.8);
+  --button-text: #60a5fa;  /* Brighter for dark mode */
+  --button-border: #60a5fa;
+  --button-hover-bg: #60a5fa;
+  --button-hover-text: #0f172a;  /* Dark background color */
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  --hover-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+  --button-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  --button-hover-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.hero-gradient {
+  background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.social-icons a {
+  @apply hover:opacity-75 transition-opacity;
+}
+
+/* Enhanced decorative elements */
+.bg-dots {
+  background-image: radial-gradient(circle, #e5e5e5 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+[data-theme='dark'] .bg-dots {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(2deg);
+  }
+}
+
+.gradient-border {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, var(--accent), var(--accent-dark));
+  border-radius: 9999px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.gradient-border:hover::before {
+  opacity: 1;
+}
+
+.hero-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-shine::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 45%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 55%
+  );
+  transform: rotate(45deg);
+  animation: shine 6s infinite;
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(45deg);
+  }
+}
+
+/* Navigation Animations */
+.nav-logo-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-logo-shine::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 45%,
+    rgba(255, 255, 255, 0.2) 50%,
+    transparent 55%
+  );
+  transform: rotate(45deg);
+  animation: nav-shine 3s infinite;
+}
+
+@keyframes nav-shine {
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(45deg);
+  }
+}
+
+.nav-link {
+  position: relative;
+  color: var(--foreground);
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -4px;
+  left: 0;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light));
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover {
+  color: var(--accent);
+  opacity: 1;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Enhanced Resume Button */
+.resume-button {
+  background-color: transparent;
+  color: var(--button-text);
+  border: 2px solid var(--button-border);
+  transition: all 0.3s ease;
+  box-shadow: var(--button-shadow);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.resume-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.7s ease;
+}
+
+.resume-button:hover::before {
+  left: 100%;
+}
+
+.resume-button:hover {
+  background-color: var(--button-hover-bg);
+  color: var(--button-hover-text);
+  transform: translateY(-2px);
+  box-shadow: var(--button-hover-shadow);
+}
+
+.resume-button:active {
+  transform: translateY(0);
+}
+
+/* Mobile Menu Button Animation */
+.menu-button {
+  transition: all 0.3s ease;
+}
+
+.menu-button:hover {
+  transform: scale(1.1);
+  background: linear-gradient(135deg, var(--accent-light), var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Project card enhancements */
+.tech-tag {
+  background-color: rgba(var(--accent-rgb), 0.1);
+  color: var(--accent);
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-light);
+}
+
+[data-theme='dark'] .tech-tag {
+  background-color: rgba(96, 165, 250, 0.1);
+  border-color: rgba(96, 165, 250, 0.2);
+}
+
+.tech-tag:hover {
+  background-color: var(--accent);
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* Project overlay enhancement */
+.project-overlay {
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark)) !important;
+  opacity: 0;
+  transition: all 0.4s ease !important;
+}
+
+.project-overlay:hover {
+  opacity: 0.95 !important;
+}
+
+/* Project section background */
+.projects-section {
+  background: linear-gradient(
+    to bottom,
+    var(--background) 0%,
+    color-mix(in srgb, var(--background) 98%, var(--accent)) 100%
+  );
+}
+
+[data-theme='dark'] .projects-section {
+  background: linear-gradient(
+    to bottom,
+    var(--background) 0%,
+    color-mix(in srgb, var(--background) 95%, var(--accent)) 100%
+  );
+}
+
+/* Navigation bar enhancements */
+.nav-bar {
+  background: var(--nav-bg);
+  border-color: var(--nav-border);
+  backdrop-filter: blur(12px);
+}
+
+[data-theme='dark'] .nav-bar {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Project title and description */
+.project-title {
+  color: var(--foreground);
+  font-weight: 600;
+}
+
+.project-description {
+  color: var(--text-muted);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Particle Animation */
+.particles {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.particle {
+  position: absolute;
+  background: var(--accent);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.particle:nth-child(3n) {
+  background: var(--accent-light);
+}
+
+.particle:nth-child(3n + 1) {
+  background: var(--accent-dark);
+}
+
+@keyframes float-up {
+  0% {
+    transform: translateY(100vh) scale(0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.5;
+  }
+  80% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-20vh) scale(1);
+    opacity: 0;
+  }
+}
+
+.particle:nth-child(1) { left: 10%; width: 8px; height: 8px; animation: float-up 8s infinite; animation-delay: -2s; }
+.particle:nth-child(2) { left: 20%; width: 12px; height: 12px; animation: float-up 10s infinite; animation-delay: -1s; }
+.particle:nth-child(3) { left: 30%; width: 6px; height: 6px; animation: float-up 7s infinite; animation-delay: -3s; }
+.particle:nth-child(4) { left: 40%; width: 10px; height: 10px; animation: float-up 9s infinite; animation-delay: -4s; }
+.particle:nth-child(5) { left: 50%; width: 8px; height: 8px; animation: float-up 8s infinite; animation-delay: -2.5s; }
+.particle:nth-child(6) { left: 60%; width: 14px; height: 14px; animation: float-up 11s infinite; animation-delay: -1.5s; }
+.particle:nth-child(7) { left: 70%; width: 7px; height: 7px; animation: float-up 7.5s infinite; animation-delay: -3.5s; }
+.particle:nth-child(8) { left: 80%; width: 9px; height: 9px; animation: float-up 8.5s infinite; animation-delay: -2.8s; }
+.particle:nth-child(9) { left: 90%; width: 11px; height: 11px; animation: float-up 9.5s infinite; animation-delay: -1.8s; }
+
+/* Enhanced hero section background */
+.hero-section {
+  position: relative;
+  background: 
+    radial-gradient(circle at top right, var(--accent-light) 0%, transparent 40%),
+    radial-gradient(circle at bottom left, var(--accent) 0%, transparent 40%);
+  background-blend-mode: soft-light;
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--background) 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Swimming Whale Animation */
+.swimming-whale {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 20px;
+  pointer-events: none;
+  z-index: 0;
+  animation: swim 15s linear infinite;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.swimming-whale:hover {
+  opacity: 1;
+}
+
+/* Navigation items should be above the whale */
+.nav-logo-shine,
+.nav-link,
+.resume-button,
+.theme-toggle {
+  position: relative;
+  z-index: 1;
+  background: var(--nav-bg);
+  padding: 0.5rem;
+}
+
+/* Add backdrop to navigation items */
+.nav-items-container {
+  position: relative;
+  z-index: 1;
+  background: var(--nav-bg);
+  padding: 0.5rem;
+  border-radius: 9999px;
+  backdrop-filter: blur(8px);
+}
+
+@keyframes swim {
+  0% {
+    left: -40px;
+    transform: translateY(-50%) scaleX(1);
+    opacity: 0.6;
+  }
+  45% {
+    opacity: 0.6;
+  }
+  47%, 53% {
+    opacity: 0;
+  }
+  55% {
+    opacity: 0.6;
+  }
+  49% {
+    transform: translateY(-50%) scaleX(1);
+  }
+  50% {
+    left: calc(100% + 40px);
+    transform: translateY(-50%) scaleX(-1);
+  }
+  99% {
+    transform: translateY(-50%) scaleX(-1);
+  }
+  100% {
+    left: -40px;
+    transform: translateY(-50%) scaleX(1);
+    opacity: 0.6;
+  }
+}
+
+@keyframes tail-wave {
+  0%, 100% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+}
+
+.whale-tail {
+  animation: tail-wave 2s ease-in-out infinite;
+  transform-origin: center left;
+}
+
+.whale-spout {
+  animation: spout 4s linear infinite;
+  transform-origin: bottom center;
+  opacity: 0;
+}
+
+@keyframes spout {
+  0%, 85%, 100% {
+    opacity: 0;
+    transform: translateY(0) scale(0.8);
+  }
+  90%, 95% {
+    opacity: 0.8;
+    transform: translateY(-8px) scale(1);
+  }
+}
+
+.connect-button {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    90deg,
+    var(--accent) 0%,
+    var(--accent-dark) 50%,
+    var(--accent) 100%
+  );
+  background-size: 200% 100%;
+  animation: gradient-shift 3s linear infinite;
+  transition: all 0.3s ease;
+}
+
+.connect-button::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(
+    90deg,
+    var(--accent-light),
+    var(--accent),
+    var(--accent-dark)
+  );
+  background-size: 200% 100%;
+  animation: gradient-shift 3s linear infinite;
+  z-index: -2;
+  border-radius: 9999px;
+}
+
+.connect-button::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background: inherit;
+  border-radius: 9999px;
+  z-index: -1;
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 200% 0%;
+  }
+}
+
+.connect-button:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 
+    0 10px 20px -10px var(--accent),
+    0 0 15px var(--accent-light);
+}
+
+.connect-button:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.connect-icon {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.connect-icon::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  transform: scale(0);
+  transition: transform 0.3s ease;
+}
+
+.connect-button:hover .connect-icon::before {
+  transform: scale(1);
+}
+
+.connect-button:hover .connect-icon {
+  transform: translateX(4px) rotate(-45deg);
 }
