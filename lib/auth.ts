@@ -81,25 +81,41 @@ export async function verifyPassword(password: string, hashedPassword: string): 
   }
 }
 
-export async function createUser(email: string, _password: string): Promise<User | null> {
+export async function createUser(email: string, password: string): Promise<User | null> {
   try {
     const existingUser = await findUserByEmail(email);
     if (existingUser) {
       return null;
     }
 
-    // Here you would typically create a new user in your database
-    // For now, we'll return null as the database integration is not implemented
-    return null;
+    const hashedPassword = await hashPassword(password);
+    // Return a mock user for now
+    return {
+      id: '1',
+      email,
+      password: hashedPassword,
+      name: email.split('@')[0],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
   } catch {
     return null;
   }
 }
 
-export async function findUserByEmail(_email: string): Promise<User | null> {
+export async function findUserByEmail(email: string): Promise<User | null> {
   try {
-    // Here you would typically query your database for the user
-    // For now, we'll return null as the database integration is not implemented
+    // Return a mock user if email matches admin email
+    if (email === 'admin@example.com') {
+      return {
+        id: '1',
+        email,
+        password: await hashPassword('admin'),
+        name: 'Admin',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+    }
     return null;
   } catch {
     return null;
