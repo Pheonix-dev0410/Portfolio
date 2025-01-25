@@ -88,7 +88,6 @@ export async function createUser(email: string, password: string): Promise<User 
       return null;
     }
 
-    const hashedPassword = await hashPassword(password);
     // Here you would typically create a new user in your database
     // For now, we'll return null as the database integration is not implemented
     return null;
@@ -97,7 +96,7 @@ export async function createUser(email: string, password: string): Promise<User 
   }
 }
 
-export async function findUserByEmail(email: string): Promise<User | null> {
+export async function findUserByEmail(_email: string): Promise<User | null> {
   try {
     // Here you would typically query your database for the user
     // For now, we'll return null as the database integration is not implemented

@@ -51,7 +51,7 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getUserFromRequest(request as any);
+    const session = await getUserFromRequest(request);
     if (!session) {
       return NextResponse.json(
         { error: 'Unauthorized' },
@@ -107,7 +107,7 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getUserFromRequest(request as any);
+    const session = await getUserFromRequest(request);
     if (!session) {
       return NextResponse.json(
         { error: 'Unauthorized' },
