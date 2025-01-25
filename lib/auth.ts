@@ -81,7 +81,7 @@ export async function verifyPassword(password: string, hashedPassword: string): 
   }
 }
 
-export async function createUser(email: string, password: string): Promise<User | null> {
+export async function createUser(email: string, _password: string): Promise<User | null> {
   try {
     const existingUser = await findUserByEmail(email);
     if (existingUser) {
