@@ -1,8 +1,8 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { verifyPassword, findUserByEmail } from '@/lib/auth';
+import NextAuth from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { findUserByEmail, verifyPassword } from '@/lib/auth';
 
-export const authOptions: NextAuthOptions = {
+const handler = NextAuth({
     providers: [
         CredentialsProvider({
             name: "Credentials",
@@ -28,9 +28,9 @@ export const authOptions: NextAuthOptions = {
                 }
 
                 return {
-                    id: user._id.toString(),
+                    id: user.id,
                     email: user.email,
-                    name: user.name
+                    name: user.name,
                 };
             }
         })
@@ -50,14 +50,12 @@ export const authOptions: NextAuthOptions = {
             return token;
         },
         async session({ session, token }) {
-            if (token && session.user) {
-                session.user.id = token.id;
+            if (session.user) {
+                session.user.id = token.id as string;
             }
             return session;
         },
     },
-};
-
-const handler = NextAuth(authOptions);
+});
 
 export { handler as GET, handler as POST }; 
