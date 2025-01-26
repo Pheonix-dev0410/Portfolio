@@ -2,15 +2,13 @@
 
 import { useEffect, useState } from 'react';
 
-interface Project {
-  id: string;
-  title: string;
-  createdAt: string;
-}
-
 interface Stats {
   totalProjects: number;
-  recentProjects: Project[];
+  recentProjects: Array<{
+    id: string;
+    title: string;
+    createdAt: string;
+  }>;
 }
 
 export default function AdminDashboard() {
@@ -32,18 +30,16 @@ export default function AdminDashboard() {
         setStats({
           totalProjects: projects.length,
           recentProjects: projects
-            .sort((a: Project, b: Project) => 
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-            )
+            .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
             .slice(0, 5)
-            .map((project: Project) => ({
+            .map((project: any) => ({
               id: project.id,
               title: project.title,
               createdAt: new Date(project.createdAt).toLocaleDateString(),
             })),
         });
-      } catch (err) {
-        console.error('Error fetching stats:', err);
+      } catch (error) {
+        console.error('Error fetching stats:', error);
       } finally {
         setIsLoading(false);
       }

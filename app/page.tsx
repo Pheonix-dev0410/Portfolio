@@ -106,7 +106,7 @@ export default function Home() {
               priority
             />
           </div>
-          <h1 className="text-2xl mb-2">Hi I&apos;m Pranav Garg</h1>
+          <h1 className="text-2xl mb-2">Hi I'm Pranav Garg</h1>
           <h2 className="text-5xl md:text-6xl font-bold max-w-3xl mx-auto mb-6 bg-gradient-to-r from-foreground via-foreground/90 to-foreground bg-clip-text text-transparent hero-shine">
             Building digital products, brands, and experience.
           </h2>

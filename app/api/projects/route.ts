@@ -1,68 +1,63 @@
 import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-import dbConnect from '@/lib/dbConnect';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/auth';
+import { PrismaClient } from '@prisma/client';
+import { getUserFromRequest } from '@/lib/auth';
 
-interface ProjectData {
-  title: string;
-  description: string;
-  technologies: string[];
-  imageUrl?: string;
-  liveUrl?: string;
-  githubUrl?: string;
-}
+const prisma = new PrismaClient();
 
 // GET all projects
 export async function GET() {
   try {
-    await dbConnect();
-    
-    // Project fetching logic here
+    const projects = await prisma.project.findMany({
+      include: {
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+      },
+    });
 
-    return NextResponse.json({ projects: [] });
+    return NextResponse.json(projects);
   } catch (error) {
     console.error('Error fetching projects:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch projects' },
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }
 }
 
 // POST new project
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
-    const session = await getServerSession(authOptions);
-    
+    const session = await getUserFromRequest(request as any);
     if (!session) {
       return NextResponse.json(
-        { error: 'Not authenticated' },
+        { error: 'Unauthorized' },
         { status: 401 }
       );
     }
 
-    const data = await request.json() as ProjectData;
-    await dbConnect();
+    const { title, description, imageUrl, technologies, githubUrl, liveUrl } = await request.json();
 
-    // Validate required fields
-    if (!data.title || !data.description || !data.technologies) {
-      return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
-      );
-    }
-
-    // Create project logic would go here
-    // For now, we'll just return success
-    return NextResponse.json({ 
-      message: 'Project created successfully',
-      project: data
+    const project = await prisma.project.create({
+      data: {
+        title,
+        description,
+        imageUrl,
+        technologies,
+        githubUrl,
+        liveUrl,
+        userId: session.id,
+      },
     });
+
+    return NextResponse.json(project, { status: 201 });
   } catch (error) {
     console.error('Error creating project:', error);
     return NextResponse.json(
-      { error: 'Failed to create project' },
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }

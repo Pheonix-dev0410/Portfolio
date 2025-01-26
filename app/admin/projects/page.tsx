@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 interface Project {
   id: string;
@@ -19,6 +19,7 @@ export default function ProjectsPage() {
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const [formData, setFormData] = useState({
     title: '',
@@ -160,11 +161,9 @@ export default function ProjectsPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {projects.map((project) => (
           <div key={project.id} className="bg-white rounded-lg shadow-md p-6">
-            <Image
+            <img
               src={project.imageUrl}
               alt={project.title}
-              width={400}
-              height={300}
               className="w-full h-48 object-cover rounded-lg mb-4"
             />
             <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
