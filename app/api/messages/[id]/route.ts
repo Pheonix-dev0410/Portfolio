@@ -5,13 +5,10 @@ import type { NextRequest } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/auth';
 
-interface RouteParams {
-  params: {
-    id: string;
-  };
-}
-
-export async function PATCH(req: Request, { params }: RouteParams) {
+export async function PATCH(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
   try {
     await dbConnect();
     const { id } = params;
@@ -42,7 +39,7 @@ export async function PATCH(req: Request, { params }: RouteParams) {
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: RouteParams
+  { params }: { params: { id: string } }
 ) {
   try {
     const session = await getServerSession(authOptions);
