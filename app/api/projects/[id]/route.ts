@@ -11,38 +11,8 @@ interface ErrorResponse {
 }
 
 // GET single project
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const project = await prisma.project.findUnique({
-      where: { id: params.id },
-      include: {
-        user: {
-          select: {
-            name: true,
-            email: true,
-          },
-        },
-      },
-    });
-
-    if (!project) {
-      return NextResponse.json(
-        { error: 'Project not found' },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json(project);
-  } catch (error) {
-    console.error('Error fetching project:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
-  }
+export async function GET() {
+  return NextResponse.json({ message: 'Project API endpoint' });
 }
 
 // PUT update project
