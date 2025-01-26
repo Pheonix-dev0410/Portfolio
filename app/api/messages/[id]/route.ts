@@ -38,8 +38,8 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  _request: NextRequest,
-  { params }: { params: { id: string } }
+  request: Request,
+  context: { params: { id: string } }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -51,7 +51,7 @@ export async function DELETE(
     }
 
     await dbConnect();
-    const { id } = params;
+    const { id } = context.params;
     const deletedMessage = await Message.findByIdAndDelete(id);
 
     if (!deletedMessage) {
