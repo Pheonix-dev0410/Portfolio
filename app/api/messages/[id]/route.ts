@@ -4,19 +4,13 @@ import Message from '@/src/models/message';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/auth';
 
-interface RequestContext {
-  params: {
-    id: string;
-  };
-}
-
 export async function PATCH(
   request: Request,
-  context: RequestContext
+  { params }: { params: { id: string } }
 ) {
   try {
     await dbConnect();
-    const { id } = context.params;
+    const { id } = params;
     const body = await request.json();
 
     const updatedMessage = await Message.findByIdAndUpdate(
@@ -44,7 +38,7 @@ export async function PATCH(
 
 export async function DELETE(
   request: Request,
-  context: RequestContext
+  { params }: { params: { id: string } }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -56,7 +50,7 @@ export async function DELETE(
     }
 
     await dbConnect();
-    const { id } = context.params;
+    const { id } = params;
     const deletedMessage = await Message.findByIdAndDelete(id);
 
     if (!deletedMessage) {
