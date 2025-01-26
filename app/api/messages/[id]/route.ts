@@ -4,9 +4,11 @@ import Message from '@/src/models/message';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/auth';
 
+type Params = { params: { id: string } };
+
 export async function PATCH(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: Params
 ) {
   try {
     await dbConnect();
@@ -37,9 +39,9 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  _req: Request,
-  { params }: { params: { id: string } }
-) {
+  request: Request,
+  { params }: Params
+): Promise<NextResponse> {
   try {
     const session = await getServerSession(authOptions);
     if (!session) {
