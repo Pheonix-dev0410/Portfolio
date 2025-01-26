@@ -36,13 +36,9 @@ export async function PATCH(
   }
 }
 
-type Props = {
-  params: { id: string }
-}
-
 export async function DELETE(
-  req: Request,
-  props: Props
+  _req: Request,
+  { params }: { params: { id: string } }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -54,7 +50,7 @@ export async function DELETE(
     }
 
     await dbConnect();
-    const { id } = props.params;
+    const { id } = params;
     const deletedMessage = await Message.findByIdAndDelete(id);
 
     if (!deletedMessage) {
